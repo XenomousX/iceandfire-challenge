@@ -1,0 +1,127 @@
+<header class="page-header">
+  <h1>Explore the World of Game of Thrones</h1>
+  <p>
+    Delve into the lore of books, meet iconic characters, and uncover the
+    legendary houses of Westeros.
+  </p>
+</header>
+
+<section class="section books">
+  <div class="container">
+    <h2>📚 Books</h2>
+    <nz-input-group [nzSuffix]="suffixIconSearch" class="search-box">
+      <input type="text" nz-input placeholder="Search Book ..." (keyup)="onSearchBooks()" [(ngModel)]="bookSerach" />
+    </nz-input-group>
+    <ul class="list" *ngIf="books$ | async as books">
+      <li *ngFor="let book of books" (click)="openModal('book', book.url)">
+        <div>{{ book.name }}</div>
+        <div class="sub-text">By: {{ book.authors.join(", ") }}</div>
+      </li>
+    </ul>
+    <div class="load-more">
+      <button nz-button nzType="primary" (click)="loadMoreBooks()">
+        Load More
+      </button>
+    </div>
+  </div>
+</section>
+
+<section class="section characters">
+  <div class="container">
+    <h2>🧝 Characters</h2>
+    <nz-input-group [nzSuffix]="suffixIconSearch" class="search-box">
+      <input type="text" nz-input placeholder="Search Book ..." (keyup)="onSearchCharacters()" [(ngModel)]="characterSerach" />
+    </nz-input-group>
+    <ul class="list" *ngIf="characters$ | async as characters">
+      <li
+        *ngFor="let character of characters"
+        (click)="openModal('character', character.url)"
+      >
+        <div>{{ character.aliases.join(", ") }}</div>
+        <div class="sub-text">
+          Name: {{ character.name.length > 1 ? character.name : "-" }}
+        </div>
+      </li>
+    </ul>
+    <div class="load-more">
+      <button nz-button nzType="primary" (click)="loadMoreCharacters()">
+        Load More
+      </button>
+    </div>
+  </div>
+</section>
+
+<section class="section houses">
+  <div class="container">
+    <h2>🏰 Houses</h2>
+    <nz-input-group [nzSuffix]="suffixIconSearch" class="search-box">
+      <input type="text" nz-input placeholder="Search Book ..." (keyup)="onSearchHouses()" [(ngModel)]="houseSerach" />
+    </nz-input-group>
+    <ul class="list" *ngIf="houses$ | async as houses">
+      <li *ngFor="let house of houses" (click)="openModal('house', house.url)">
+        <div>{{ house.name }}</div>
+        <!-- <div class="sub-text">By: {{ book.authors.join(', ') }}</div> -->
+      </li>
+    </ul>
+    <div class="load-more">
+      <button nz-button nzType="primary" (click)="loadMoreHouses()">
+        Load More
+      </button>
+    </div>
+  </div>
+</section>
+
+<nz-modal
+  [(nzVisible)]="isModalOpen"
+  (nzTitle)="(modalDetail.title)"
+  (nzOnCancel)="handleCancel()"
+  a
+  (nzOnOk)="handleCancel()"
+>
+  <ng-container *nzModalContent>
+    <div *ngIf="modalDetail.type === 'book'">
+      <h2>{{ detailBook.name }}</h2>
+      <p><strong>Authors:</strong> {{ detailBook.authors.join(", ") }}</p>
+      <p><strong>ISBN:</strong> {{ detailBook.isbn }}</p>
+      <p><strong>Number of Pages:</strong> {{ detailBook.numberOfPages }}</p>
+      <p><strong>Publisher:</strong> {{ detailBook.publisher }}</p>
+      <p><strong>Country:</strong> {{ detailBook.country }}</p>
+      <p><strong>Media Type:</strong> {{ detailBook.mediaType }}</p>
+      <p>
+        <strong>Released:</strong>
+        {{ detailBook.released | date : "longDate" }}
+      </p>
+    </div>
+
+    <div *ngIf="modalDetail.type === 'character'">
+      <h2>{{ detailCharacter.name }}</h2>
+      <p><strong>Aliases:</strong> {{ detailCharacter.aliases.join(", ") }}</p>
+      <p><strong>Titles:</strong> {{ detailCharacter.titles.join(", ") }}</p>
+      <p><strong>Gender:</strong> {{ detailCharacter.gender }}</p>
+      <p><strong>Born:</strong> {{ detailCharacter.born || "-" }}</p>
+      <p><strong>Died:</strong> {{ detailCharacter.died || "-" }}</p>
+      <p><strong>Culture:</strong> {{ detailCharacter.culture || "-" }}</p>
+      <p>
+        <strong>Played By:</strong>
+        {{ detailCharacter.playedBy.join(", ") || "-" }}
+      </p>
+      <p>
+        <strong>TV Series:</strong>
+        {{ detailCharacter.tvSeries.join(", ") || "-" }}
+      </p>
+    </div>
+
+    <div *ngIf="modalDetail.type === 'house'">
+      <h2>{{ detailHouse.name }}</h2>
+      <p><strong>Region:</strong> {{ detailHouse.region }}</p>
+      <p><strong>Coat of Arms:</strong> {{ detailHouse.coatOfArms }}</p>
+      <p><strong>Words:</strong> {{ detailHouse.words }}</p>
+      <p><strong>Founded:</strong> {{ detailHouse.founded }}</p>
+      <p><strong>Founder:</strong> {{ detailHouse.founder }}</p>
+    </div>
+  </ng-container>
+</nz-modal>
+
+<ng-template #suffixIconSearch>
+  <nz-icon nzType="search" />
+</ng-template>

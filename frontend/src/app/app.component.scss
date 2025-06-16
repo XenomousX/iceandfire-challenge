@@ -1,0 +1,38 @@
+.logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  margin: 16px 24px 16px 0;
+  float: left;
+
+  img {
+    width: 90%;
+    height: 90%;
+    border-radius: 50%;
+  }
+}
+
+[nz-menu] {
+  line-height: 64px;
+}
+
+nz-breadcrumb {
+  margin: 16px 0;
+}
+
+nz-content {
+  padding: 0 14px;
+}
+
+nz-footer {
+  text-align: center;
+}
+
+.inner-content {
+  background: #fff;
+  padding: 24px;
+  min-height: 280px;
+  margin: 24px 0;
+}
