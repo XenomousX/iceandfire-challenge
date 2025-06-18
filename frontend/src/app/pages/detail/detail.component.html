@@ -10,7 +10,13 @@
   <div class="container">
     <h2>📚 Books</h2>
     <nz-input-group [nzSuffix]="suffixIconSearch" class="search-box">
-      <input type="text" nz-input placeholder="Search Book ..." (keyup)="onSearchBooks()" [(ngModel)]="bookSerach" />
+      <input
+        type="text"
+        nz-input
+        placeholder="Search Book ..."
+        (keyup)="onSearchBooks()"
+        [(ngModel)]="bookSerach"
+      />
     </nz-input-group>
     <ul class="list" *ngIf="books$ | async as books">
       <li *ngFor="let book of books" (click)="openModal('book', book.url)">
@@ -30,7 +36,13 @@
   <div class="container">
     <h2>🧝 Characters</h2>
     <nz-input-group [nzSuffix]="suffixIconSearch" class="search-box">
-      <input type="text" nz-input placeholder="Search Book ..." (keyup)="onSearchCharacters()" [(ngModel)]="characterSerach" />
+      <input
+        type="text"
+        nz-input
+        placeholder="Search Book ..."
+        (keyup)="onSearchCharacters()"
+        [(ngModel)]="characterSerach"
+      />
     </nz-input-group>
     <ul class="list" *ngIf="characters$ | async as characters">
       <li
@@ -55,7 +67,13 @@
   <div class="container">
     <h2>🏰 Houses</h2>
     <nz-input-group [nzSuffix]="suffixIconSearch" class="search-box">
-      <input type="text" nz-input placeholder="Search Book ..." (keyup)="onSearchHouses()" [(ngModel)]="houseSerach" />
+      <input
+        type="text"
+        nz-input
+        placeholder="Search Book ..."
+        (keyup)="onSearchHouses()"
+        [(ngModel)]="houseSerach"
+      />
     </nz-input-group>
     <ul class="list" *ngIf="houses$ | async as houses">
       <li *ngFor="let house of houses" (click)="openModal('house', house.url)">
@@ -75,8 +93,7 @@
   [(nzVisible)]="isModalOpen"
   (nzTitle)="(modalDetail.title)"
   (nzOnCancel)="handleCancel()"
-  a
-  (nzOnOk)="handleCancel()"
+  (nzOnOk)="saveFavorite()"
 >
   <ng-container *nzModalContent>
     <div *ngIf="modalDetail.type === 'book'">
@@ -120,6 +137,13 @@
       <p><strong>Founder:</strong> {{ detailHouse.founder }}</p>
     </div>
   </ng-container>
+
+  <div *nzModalFooter>
+    <button nz-button nzType="default" (click)="handleCancel()">Canvel</button>
+    <button nz-button nzType="primary" (click)="saveFavorite()">
+      Save Favorite
+    </button>
+  </div>
 </nz-modal>
 
 <ng-template #suffixIconSearch>

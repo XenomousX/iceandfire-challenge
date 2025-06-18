@@ -1,0 +1,23 @@
+.login-form {
+  max-width: 100%;
+  padding: 1rem;
+  box-sizing: border-box;
+
+  .form-footer {
+    margin-top: 1.5rem;
+    text-align: center;
+  }
+
+  @media (min-width: 768px) {
+    max-width: 400px;
+    margin: 2rem auto;
+    border: 1px solid #d9d9d9;
+    border-radius: 8px;
+    padding: 2rem;
+    background: #fff;
+
+    .login-button {
+      width: 100%;
+    }
+  }
+}

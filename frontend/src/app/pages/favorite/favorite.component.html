@@ -1,0 +1,81 @@
+<div>
+  <div class="font-bold">
+    Welcome {{ userProfile?.username }}! Here are your favorite bookmarks
+  </div>
+</div>
+
+<div class="favorite-section" *ngIf="favoriteItems.length > 0">
+  <nz-card
+    *ngFor="let item of favoriteItems"
+    [nzTitle]="(item.name)"
+    [nzExtra]="extraTemplate"
+    (click)="openModal(item.type, item.url, item.id)"
+    [nzHoverable]="true"
+  >
+    <p>Name: {{ item.name }}</p>
+    <p>Type: {{ item.type }}</p>
+  </nz-card>
+  <ng-template #extraTemplate>
+    <!-- <a class="danger" (click)="removeFavorite(item.id)">Remove</a> -->
+  </ng-template>
+</div>
+
+<nz-modal
+  [(nzVisible)]="isModalOpen"
+  (nzTitle)="(modalDetail.title)"
+  (nzOnCancel)="handleCancel()"
+>
+  <ng-container *nzModalContent>
+    <div *ngIf="modalDetail.type === 'book'">
+      <h2>{{ detailBook.name }}</h2>
+      <p><strong>Authors:</strong> {{ detailBook.authors.join(", ") }}</p>
+      <p><strong>ISBN:</strong> {{ detailBook.isbn }}</p>
+      <p><strong>Number of Pages:</strong> {{ detailBook.numberOfPages }}</p>
+      <p><strong>Publisher:</strong> {{ detailBook.publisher }}</p>
+      <p><strong>Country:</strong> {{ detailBook.country }}</p>
+      <p><strong>Media Type:</strong> {{ detailBook.mediaType }}</p>
+      <p>
+        <strong>Released:</strong>
+        {{ detailBook.released | date : "longDate" }}
+      </p>
+    </div>
+
+    <div *ngIf="modalDetail.type === 'character'">
+      <h2>{{ detailCharacter.name }}</h2>
+      <p><strong>Aliases:</strong> {{ detailCharacter.aliases.join(", ") }}</p>
+      <p><strong>Titles:</strong> {{ detailCharacter.titles.join(", ") }}</p>
+      <p><strong>Gender:</strong> {{ detailCharacter.gender }}</p>
+      <p><strong>Born:</strong> {{ detailCharacter.born || "-" }}</p>
+      <p><strong>Died:</strong> {{ detailCharacter.died || "-" }}</p>
+      <p><strong>Culture:</strong> {{ detailCharacter.culture || "-" }}</p>
+      <p>
+        <strong>Played By:</strong>
+        {{ detailCharacter.playedBy.join(", ") || "-" }}
+      </p>
+      <p>
+        <strong>TV Series:</strong>
+        {{ detailCharacter.tvSeries.join(", ") || "-" }}
+      </p>
+    </div>
+
+    <div *ngIf="modalDetail.type === 'house'">
+      <h2>{{ detailHouse.name }}</h2>
+      <p><strong>Region:</strong> {{ detailHouse.region }}</p>
+      <p><strong>Coat of Arms:</strong> {{ detailHouse.coatOfArms }}</p>
+      <p><strong>Words:</strong> {{ detailHouse.words }}</p>
+      <p><strong>Founded:</strong> {{ detailHouse.founded }}</p>
+      <p><strong>Founder:</strong> {{ detailHouse.founder }}</p>
+    </div>
+  </ng-container>
+
+  <div *nzModalFooter>
+    <button nz-button nzType="default" (click)="handleCancel()">Cencel</button>
+    <button nz-button nzType="default" (click)="removeFavorite(detailCurrent.favoriteId)" nzDanger>
+      Remove Favorite
+    </button>
+  </div>
+</nz-modal>
+
+<ng-template #suffixIconSearch>
+  <nz-icon nzType="search" />
+</ng-template>

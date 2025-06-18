@@ -1,0 +1,42 @@
+<form
+  nz-form
+  [formGroup]="registerForm"
+  (ngSubmit)="onSubmit()"
+  class="register-form"
+  nzLayout="vertical"
+>
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24" nzFor="username" nzRequired>Username</nz-form-label>
+    <nz-form-control [nzSpan]="24" nzErrorTip="Please input your username!">
+      <input nz-input id="username" formControlName="username" placeholder="Enter your username" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24" nzFor="email" nzRequired>Email</nz-form-label>
+    <nz-form-control [nzSpan]="24" [nzErrorTip]="'Please enter a valid email!'">
+      <input nz-input id="email" formControlName="email" placeholder="Enter your email" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24" nzFor="password" nzRequired>Password</nz-form-label>
+    <nz-form-control [nzSpan]="24" nzErrorTip="Password is required!">
+      <input
+        nz-input
+        type="password"
+        id="password"
+        formControlName="password"
+        placeholder="Enter your password"
+      />
+    </nz-form-control>
+  </nz-form-item>
+
+  <div class="form-footer">
+    <button nz-button nzType="primary" [disabled]="registerForm.invalid">Register</button>
+  </div>
+</form>
+<!-- Add a link to the login page -->
+<div class="login-link">
+  <p>Already have an account? <a routerLink="/auth">Login here</a></p>
+</div>

@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from 'src/app/services/api.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { Router } from '@angular/router';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 import {
   Observable,
   BehaviorSubject,
@@ -37,6 +40,12 @@ export class DetailComponent implements OnInit {
   detailHouse: any;
   detailBook: any;
 
+  detailCurrent: any = {
+    name: null,
+    type: null,
+    url: null,
+  };
+
   isModalOpen: boolean = false;
   modalDetail: any = {
     type: '',
@@ -64,7 +73,12 @@ export class DetailComponent implements OnInit {
     scan((acc, curr) => [...acc, ...curr])
   );
 
-  constructor(private apiService: ApiService) {
+  constructor(
+    private apiService: ApiService,
+    private authService: AuthService,
+    private router: Router,
+    private notification: NzNotificationService
+  ) {
     // Initialization logic can go here
   }
 
@@ -149,16 +163,25 @@ export class DetailComponent implements OnInit {
     if (type === 'book') {
       this.apiService.getBookById(url).subscribe((data) => {
         this.detailBook = data;
+        this.detailCurrent = {
+          name: this.detailBook.name,
+          type: 'book',
+          url: this.detailBook.url,
+        };
         this.modalDetail = {
           type: 'book',
           modalTitle: `Book: ${this.detailBook.name}`,
         };
-        console.log(this.detailBook);
         this.isModalOpen = true;
       });
     } else if (type === 'house') {
       this.apiService.getHouseById(url).subscribe((data) => {
         this.detailHouse = data;
+        this.detailCurrent = {
+          name: this.detailHouse.name,
+          type: 'house',
+          url: this.detailHouse.url,
+        };
         this.modalDetail = {
           type: 'house',
           modalTitle: `House: ${this.detailHouse.name}`,
@@ -168,6 +191,11 @@ export class DetailComponent implements OnInit {
     } else if (type === 'character') {
       this.apiService.getCharacterById(url).subscribe((data) => {
         this.detailCharacter = data;
+        this.detailCurrent = {
+          name: this.detailCharacter.name,
+          type: 'character',
+          url: this.detailCharacter.url,
+        };
         this.modalDetail = {
           type: 'character',
           modalTitle: `Character: ${this.detailCharacter.name}`,
@@ -177,10 +205,47 @@ export class DetailComponent implements OnInit {
     }
   }
 
+  saveFavorite(): void {
+    if (this.authService.isLoggedIn()) {
+      this.apiService.createFavorite(this.detailCurrent).subscribe({
+        next: (response) => {
+          this.isModalOpen = false;
+          this.notification.create(
+            'success',
+            'Favorite Saved',
+            `You have successfully saved ${this.detailCurrent.type} as a favorite.`
+          );
+        },
+        error: (error) => {
+          this.notification.create(
+            'error',
+            'Somethign went wrong',
+            'Please try again.'
+          );
+          console.error('Error saving favorite:', error);
+          // Optionally, show an error notification
+        },
+      });
+    } else {
+      this.isModalOpen = false;
+      this.router.navigate(['/auth']);
+      this.notification.create(
+        'warning',
+        'Authentication Required',
+        'Please log in to save favorites.'
+      );
+    }
+  }
+
   handleCancel(): void {
     this.isModalOpen = false;
     this.detailCharacter = null;
     this.detailHouse = null;
     this.detailBook = null;
+    this.detailCurrent = {
+      name: null,
+      type: null,
+      url: null,
+    };
   }
 }
